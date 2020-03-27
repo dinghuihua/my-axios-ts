@@ -32,6 +32,12 @@ router.get('/simple/get', function(req, res) {
         msg: 'hello world !'
     })
 })
+router.get('/base/get', function(req, res) {
+    res.json({
+        msg: 'hello base get',
+        data: req.query
+    })
+})
 
 const port = process.env.PORT || 8089
 app.listen(port, () => {
