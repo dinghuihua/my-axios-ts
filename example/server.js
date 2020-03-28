@@ -38,6 +38,27 @@ router.get('/base/get', function(req, res) {
         data: req.query
     })
 })
+router.post('/base/post', function(req, res) {
+    //console.log(req)
+    res.json({
+        code: 0,
+        message: 'SUCCESS',
+        data: res.body
+    })
+})
+router.post('/base/buffer', function(req, res) {
+    let msg = []
+    req.on('data', (chunk) => {
+        if(chunk) {
+            msg.push(chunk)
+        }
+    })
+    req.on('end', () => {
+        let buf = Buffer.concat(msg)
+        res.json(buf.toJSON())
+    })
+})
+
 
 const port = process.env.PORT || 8089
 app.listen(port, () => {
