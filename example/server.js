@@ -40,11 +40,7 @@ router.get('/base/get', function(req, res) {
 })
 router.post('/base/post', function(req, res) {
     //console.log(req)
-    res.json({
-        code: 0,
-        message: 'SUCCESS',
-        data: req.body
-    })
+    res.json(req.body)
 })
 router.post('/base/buffer', function(req, res) {
     let msg = []

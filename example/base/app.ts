@@ -1,4 +1,4 @@
-import axios from '../../src/index'
+import {axios} from '../../src/index'
 
 // ------ post 请求示例
 axios({
@@ -8,6 +8,20 @@ axios({
         a: 1,
         b: 2
     }
+}).then(res => {
+    console.log(res);
+})
+
+axios({
+    method: 'post',
+    url: '/base/post',
+    responseType: 'json',
+    data: {
+        a: 11,
+        b: 22
+    }
+}).then(res => {
+    console.log(res);
 })
 
 axios({
@@ -22,12 +36,12 @@ axios({
     }
 })
 
-const arr1 = new Int32Array([21, 31])
-axios({
-    method: 'post',
-    url: '/base/buffer',
-    data: arr1
-})
+// const arr1 = new Int32Array([21, 31])
+// axios({
+//     method: 'post',
+//     url: '/base/buffer',
+//     data: arr1
+// })
 
 // ------ get 请求示例
 // const date = new Date()
