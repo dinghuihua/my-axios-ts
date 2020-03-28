@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from './type/dataInterface'
 import { xhr } from './xhr'
 import { bulidURL } from './helpers/url'
 import {transformRequest} from './helpers/data'
-
+import { processHeaders } from './helpers/headers'
 // 处理url
 function transformUrl(config: AxiosRequestConfig) {
     const {url, params} = config
@@ -12,8 +12,14 @@ function transformUrl(config: AxiosRequestConfig) {
 function transformData(config: AxiosRequestConfig) {
     return transformRequest(config.data)
 }
+// 处理headers
+function transformHeaders (config: AxiosRequestConfig) {
+    const { headers = {}, data } = config
+    return processHeaders(headers, data)
+}
 function processConfig (config: AxiosRequestConfig) {
     config.url = transformUrl(config)
+    config.headers = transformHeaders(config)
     config.data = transformData(config)
 }
 function axios (config: AxiosRequestConfig) {

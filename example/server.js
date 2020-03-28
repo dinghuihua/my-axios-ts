@@ -43,7 +43,7 @@ router.post('/base/post', function(req, res) {
     res.json({
         code: 0,
         message: 'SUCCESS',
-        data: res.body
+        data: req.body
     })
 })
 router.post('/base/buffer', function(req, res) {

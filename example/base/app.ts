@@ -10,6 +10,18 @@ axios({
     }
 })
 
+axios({
+    method: 'post',
+    url: '/base/post',
+    headers: {
+        'content-type': 'application/json;charset=utf-8'
+    },
+    data: {
+        x: 1,
+        y: 2
+    }
+})
+
 const arr1 = new Int32Array([21, 31])
 axios({
     method: 'post',
