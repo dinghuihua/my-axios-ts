@@ -4,7 +4,8 @@ interface AxiosRequestConfig {
     params?: any,
     data?:any,
     headers?:any,
-    responseType?: XMLHttpRequestResponseType // 返回的基本数据类型
+    responseType?: XMLHttpRequestResponseType, // 返回的基本数据类型
+    timeout?: number  // 请求超时时间
 }
 type Method = 'get' | 'GET' | 'post' | 'POST' | 'delete' | 'DELETE'
   | 'head' | 'HEAD' | 'options' | 'OPTIONS' | 'put' | 'PUT' | 'patch' | 'PATCH'
@@ -21,5 +22,12 @@ interface AxiosResponse { // 定义axios方法传输到then里面到resolve数�
 export interface AxiosPromise extends Promise<AxiosResponse>{
 
 }
-
+// 返回的错误格式接口
+export interface AxiosError extends Error {
+  config: AxiosRequestConfig
+  code?: string
+  request?: any
+  response?: AxiosResponse
+  isAxiosError: boolean
+}
 export { AxiosRequestConfig, Method, AxiosResponse }  

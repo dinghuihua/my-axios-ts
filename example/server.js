@@ -5,7 +5,7 @@ const webpack = require('webpack')
 //通过watch mode，监听资源的变更，然后自动打包, 快速编译，走内存；
 const webpackDevMiddleware = require('webpack-dev-middleware')
 //实现热更新
-const webpackHotMiddleware = require('webpack-hot-middleware') 
+const webpackHotMiddleware = require('webpack-hot-middleware')
 //引用webpack的配置文件
 const WebpackConfig = require('./webpack.config')
 //实例化 express对象
@@ -27,25 +27,25 @@ app.use(bodyParser.urlencoded({ extended: true }))
 const router = express.Router()
 app.use(router)
 
-router.get('/simple/get', function(req, res) {
+router.get('/simple/get', function (req, res) {
     res.json({
         msg: 'hello world !'
     })
 })
-router.get('/base/get', function(req, res) {
+router.get('/base/get', function (req, res) {
     res.json({
         msg: 'hello base get',
         data: req.query
     })
 })
-router.post('/base/post', function(req, res) {
+router.post('/base/post', function (req, res) {
     //console.log(req)
     res.json(req.body)
 })
-router.post('/base/buffer', function(req, res) {
+router.post('/base/buffer', function (req, res) {
     let msg = []
     req.on('data', (chunk) => {
-        if(chunk) {
+        if (chunk) {
             msg.push(chunk)
         }
     })
@@ -54,7 +54,25 @@ router.post('/base/buffer', function(req, res) {
         res.json(buf.toJSON())
     })
 })
+router.get('/error/get', function (req, res) {
+    if (Math.random() > 0.5) {
+        res.json({
+            msg: `hello world`
+        })
+    } else {
+        // 返回状态码500
+        res.status(500)
+        res.end()
+    }
+})
 
+router.get('/error/timeout', function (req, res) {
+    setTimeout(() => {
+        res.json({
+            msg: `hello world`
+        })
+    }, 3000)
+})
 
 const port = process.env.PORT || 8089
 app.listen(port, () => {

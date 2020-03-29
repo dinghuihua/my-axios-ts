@@ -1,4 +1,4 @@
-import {axios} from '../../src/index'
+import axios from '../../src/index'
 
 // ------ post 请求示例
 axios({

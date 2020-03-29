@@ -1,9 +1,10 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './type/dataInterface'
 import { parseHeaders } from './helpers/headers'
+import { createError } from './helpers/error'
 
 function xhr(config: AxiosRequestConfig): AxiosPromise {
-    return new Promise((resolve) => {
-        const { url, data = null, method = 'get', headers, responseType } = config
+    return new Promise((resolve, reject) => {
+        const { url, data = null, method = 'get', headers, responseType, timeout } = config
         const request = new XMLHttpRequest()
         if (responseType) {
             request.responseType = responseType
@@ -18,8 +19,32 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
             }
         })
         request.send(data)
+        
+        // 根据请求状态码处理响应
+        function handleResponse (response: AxiosResponse) {
+            if (response.status >= 200 && response.status <= 300) {
+                resolve(response)
+            } else {
+                reject(createError(`Request failed with status code ${response.status}`, config, null, request, response))
+            }
+        }
+        // 错误处理
+        request.onerror = function handleError () {
+            reject(createError('Network Error', config, null, request))
+        }
+        // 超时处理
+        if (timeout) {
+            request.timeout = timeout
+        }
+        request.ontimeout = function handleTimeout () {
+            reject(createError(`Timeout of ${timeout}ms exceeded`, config, 'ECONNABORTED', request))
+        }
+        // 请求状态处理    
         request.onreadystatechange = function handleLoad() {
             if (request.readyState !== 4) {
+                return
+            }
+            if (request.status === 0) {
                 return
             }
             const responseHeaders = parseHeaders(request.getAllResponseHeaders()) //处理获得的响应数据头部
@@ -37,7 +62,7 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
                 request
             }
             // 将上述数据集合起来传输到axios的then方法中
-            resolve(response)
+            handleResponse(response)
         }
     })
 }
