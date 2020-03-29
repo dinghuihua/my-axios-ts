@@ -1,3 +1,3 @@
-import { axios } from './axios'
+import axios from './axios'
 export * from './type/dataInterface'
 export default axios
