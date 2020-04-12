@@ -55,6 +55,7 @@ export function parseHeaders(headers: string): any {
   return parsed
 }
 
+// 把headers里的对象合并为一个只有一级的对象
 export function flattenHeaders(headers: any, method: Method): any {
   if (!headers) {
     //如果headers不存在, 那么我就直接返回一个undefined

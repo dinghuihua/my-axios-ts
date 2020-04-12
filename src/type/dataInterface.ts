@@ -1,11 +1,12 @@
 interface AxiosRequestConfig {
-    url?: string,
-    method?: Method,
-    params?: any,
-    data?:any,
-    headers?:any,
-    responseType?: XMLHttpRequestResponseType, // 返回的基本数据类型
-    timeout?: number  // 请求超时时间
+  [propName: string]: any
+  url?: string,
+  method?: Method,
+  params?: any,
+  data?: any,
+  headers?: any,
+  responseType?: XMLHttpRequestResponseType, // 返回的基本数据类型
+  timeout?: number  // 请求超时时间
 }
 type Method = 'get' | 'GET' | 'post' | 'POST' | 'delete' | 'DELETE'
   | 'head' | 'HEAD' | 'options' | 'OPTIONS' | 'put' | 'PUT' | 'patch' | 'PATCH'
@@ -19,7 +20,7 @@ interface AxiosResponse { // 定义axios方法传输到then里面到resolve数�
   request: any // 请求的XMLHttpRequest对象实例request
 }
 
-export interface AxiosPromise extends Promise<AxiosResponse>{
+export interface AxiosPromise extends Promise<AxiosResponse> {
 
 }
 // 返回的错误格式接口
@@ -30,14 +31,14 @@ export interface AxiosError extends Error {
   response?: AxiosResponse
   isAxiosError: boolean
 }
-export { AxiosRequestConfig, Method, AxiosResponse }  
+export { AxiosRequestConfig, Method, AxiosResponse }
 
 export interface Axios {
   interceptors: {
     request: AxiosInterceptorManager<AxiosRequestConfig>
     response: AxiosInterceptorManager<AxiosResponse>
   }
- 
+
   //定义各种方法的参数和返回数据, 不管传入的参数如何, 最终返回的都是一个AxiosPromise 对象
   //在方法定义的时候, 保证实际传入的泛型和返回的promise泛型一致
   request(config: AxiosRequestConfig): AxiosPromise
@@ -58,6 +59,7 @@ export interface Axios {
 }
 
 export interface AxiosInstance extends Axios {
+  defaults: any
   // 函数描述, 可以直接用于函数变量的实现  定义一个Axios实例的基本, 这样axios即是一个函数 也拥有n多方法
   (config: AxiosRequestConfig): AxiosPromise
 }
@@ -65,13 +67,13 @@ export interface AxiosInstance extends Axios {
 export interface AxiosInterceptorManager<T> {
   //拦截器最终req和res的接口定义
   use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
-   //解除拦截器的代码操作
+  //解除拦截器的代码操作
   eject(id: number): void
 }
 //根据传入泛型参数,定义函数的基本格式, 函数返回值为联合类型
 export interface ResolvedFn<T = any> {
   (val: T): T | Promise<T>
 }
-export interface RejectedFn{
+export interface RejectedFn {
   (error: any): any
 }

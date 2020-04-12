@@ -9,7 +9,7 @@ import {
 
 import { axios as dispatchRequest } from './dispatchRequest'
 import InterceptorManager from './interceptorManager'
-import { resolve } from 'dns'
+import mergeConfig from './mergeConfig'
 
 interface Interceptors {
   request: InterceptorManager<AxiosRequestConfig>,
@@ -21,9 +21,11 @@ interface PromiseChain<T> {
 }
 
 export default class Axios {
+  defaults: AxiosRequestConfig
   interceptors: Interceptors
 
-  constructor () {
+  constructor (initConfig: AxiosRequestConfig) {
+    this.defaults = initConfig
     this.interceptors = {
       request: new InterceptorManager<AxiosRequestConfig>(),
       response: new InterceptorManager<AxiosResponse>()
@@ -51,8 +53,7 @@ export default class Axios {
     )
   }
 
-  request(url: any, config?: any): AxiosPromise {
-
+  request(url: string | AxiosRequestConfig, config?: AxiosRequestConfig): AxiosPromise {
     if(typeof url === 'string') {
       if (!config) {
         config = {}
@@ -62,6 +63,9 @@ export default class Axios {
       // 要是第一个参数不是字符串, 那就把url当做是config对象
       config = url
     }
+
+    config = mergeConfig(this.defaults, config)
+
     const chain: PromiseChain<any>[] = [
       {
         resolved: dispatchRequest,

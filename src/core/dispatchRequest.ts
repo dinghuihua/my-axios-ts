@@ -2,7 +2,7 @@ import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../type/dataInt
 import { xhr } from './xhr'
 import { bulidURL } from '../helpers/url'
 import { transformRequest, transformResponse } from '../helpers/data'
-import { processHeaders } from '../helpers/headers'
+import { processHeaders, flattenHeaders } from '../helpers/headers'
 // 处理url
 function transformUrl(config: AxiosRequestConfig) {
 	const { url, params } = config
@@ -26,6 +26,7 @@ function processConfig(config: AxiosRequestConfig) {
 	config.headers = transformHeaders(config)
 	config.url = transformUrl(config)
 	config.data = transformData(config)
+	config.headers = flattenHeaders(config.headers, config.method!)
 }
 function axios(config: AxiosRequestConfig): AxiosPromise {
 	processConfig(config) // 合并各项参数，生成最终的url值

@@ -17,11 +17,12 @@ export function extend<T, U>(to: T, from: U): T & U {
   // 返回T和U的交叉类型
   //利用泛型实现两者直接合并的
   for (const key in from) {
-    ;(to as T & U)[key] = from[key] as any //采用类型断言 避免不比较的编译检测错误
+    ; (to as T & U)[key] = from[key] as any //采用类型断言 避免不比较的编译检测错误
   }
   return to as T & U
 }
 
+// 深度对象合并
 export function deepMerge(...objs: any[]): any {
   //objs 是个数组, 里面存储的传进来的1至2个对象
   const result = Object.create(null) //创建空对象, 存储最终数据
